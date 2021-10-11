@@ -54,6 +54,15 @@ struct Lookup: Codable {
         public let uid: String
         public var id: String { uid }
 
+        public var hinmanNo: Int? {
+            guard let addr = dcHinmanaddr else { return nil }
+            guard let match = (try? NSRegularExpression(
+                pattern: "^HB\\s(\\d{4})$"
+            ))?.firstMatch(in: addr, options: [], range: NSRange(location: 0, length: addr.utf16.count))?.range(at: 1) else {return nil}
+                guard let range = Range(match, in: addr) else { return nil}
+                return Int(addr[range])
+        }
+        
         public func asContact() -> CNMutableContact {
             let contact = CNMutableContact()
 
@@ -68,6 +77,17 @@ struct Lookup: Codable {
             }
 
             contact.emailAddresses = [CNLabeledValue(label: eduPersonPrimaryAffiliation == "Student" ? CNLabelSchool : CNLabelWork, value: mail as NSString)]
+            
+            if hinmanNo != nil {
+                let address = CNMutablePostalAddress()
+                address.state = "NH"
+                address.city = "Hanover"
+                address.country = "United States"
+                address.postalCode = "03755"
+                address.street = "\(hinmanNo!) Hinman"
+                
+                contact.postalAddresses = [CNLabeledValue<CNPostalAddress>(label:CNLabelSchool, value:address)]
+            }
 
             if telephoneNumber != nil {
                 contact.phoneNumbers = [CNLabeledValue(
@@ -78,6 +98,8 @@ struct Lookup: Codable {
             if eduPersonNickname != nil {
                 contact.nickname = eduPersonNickname!
             }
+            
+            contact.note = "Dartmouth ID: \(uid)"
 
             return contact
 
@@ -121,28 +143,6 @@ struct ContentView: View {
     }
 
     @FocusState private var focusedField: Field?
-
-    // https://stackoverflow.com/q/58200555/9068081
-     struct ClearButton: ViewModifier {
-        @Binding var text: String
-        var focused: Bool
-
-        public func body(content: Content) -> some View {
-            HStack {
-                content
-
-                if !text.isEmpty && focused {
-                    Button {
-                        text = ""
-                    }
-                    label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(Color(UIColor.opaqueSeparator))
-                    }
-                }
-            }
-        }
-    }
 
     struct UserView: View {
         let user: Lookup.User
@@ -229,6 +229,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
+                if (users.count == 0) { Text("No results") } // todo: enum for stateZ
                 List {
                     if (selected.count > 0) {
                         SelectedItemsView(selected: $selected)
@@ -239,7 +240,7 @@ struct ContentView: View {
                                 Button { selected.append(user) } label: { Image(systemName: "text.badge.plus") }.tint(.green)
                             }
                             .swipeActions(edge: .trailing) {
-                                Button { mail() } label: { Image(systemName: "envelope.fill") }.tint(.blue)
+                                Button { ContentView.mail(user.mail) } label: { Image(systemName: "envelope.fill") }.tint(.blue)
                             }
                     }
                 }
