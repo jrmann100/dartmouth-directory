@@ -10,6 +10,9 @@
 		174B2592270BD74D0052D170 /* Dartmouth Directory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174B2591270BD74D0052D170 /* Dartmouth Directory.swift */; };
 		174B2594270BD7500052D170 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174B2593270BD7500052D170 /* Assets.xcassets */; };
 		174B2597270BD7500052D170 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174B2596270BD7500052D170 /* Preview Assets.xcassets */; };
+		17F521A42714B49C00CFEBD6 /* Lookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F521A32714B49C00CFEBD6 /* Lookup.swift */; };
+		17F521A62714B4D900CFEBD6 /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F521A52714B4D900CFEBD6 /* ContactView.swift */; };
+		17F521A82714B98F00CFEBD6 /* ItemViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F521A72714B98F00CFEBD6 /* ItemViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +22,9 @@
 		174B2596270BD7500052D170 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		174B2598270BD7500052D170 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		174B259E270BDAD30052D170 /* Dartmouth Directory.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Dartmouth Directory.entitlements"; sourceTree = "<group>"; };
+		17F521A32714B49C00CFEBD6 /* Lookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lookup.swift; sourceTree = "<group>"; };
+		17F521A52714B4D900CFEBD6 /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
+		17F521A72714B98F00CFEBD6 /* ItemViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +59,9 @@
 			children = (
 				174B259E270BDAD30052D170 /* Dartmouth Directory.entitlements */,
 				174B2591270BD74D0052D170 /* Dartmouth Directory.swift */,
+				17F521A72714B98F00CFEBD6 /* ItemViews.swift */,
+				17F521A52714B4D900CFEBD6 /* ContactView.swift */,
+				17F521A32714B49C00CFEBD6 /* Lookup.swift */,
 				174B2593270BD7500052D170 /* Assets.xcassets */,
 				174B2598270BD7500052D170 /* Info.plist */,
 				174B2595270BD7500052D170 /* Preview Content */,
@@ -138,6 +147,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				174B2592270BD74D0052D170 /* Dartmouth Directory.swift in Sources */,
+				17F521A62714B4D900CFEBD6 /* ContactView.swift in Sources */,
+				17F521A42714B49C00CFEBD6 /* Lookup.swift in Sources */,
+				17F521A82714B98F00CFEBD6 /* ItemViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
