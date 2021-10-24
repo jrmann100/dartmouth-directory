@@ -97,8 +97,8 @@ struct Lookup: Codable {
             contact.note = "Dartmouth ID: \(uid)"
 
             return contact
-
-//            // Save the newly created contact
+            
+// TODO: contact saving? I'd like AirDrop/download-like functionality.
 //            let store = CNContactStore()
 //            let saveRequest = CNSaveRequest()
 //            saveRequest.add(contact, toContainerWithIdentifier: nil)
@@ -116,8 +116,9 @@ struct Lookup: Codable {
             Lookup.open("mailto:\(mail!)")
         }
 
-        public func call() {
-            Lookup.open("tel:\(telephoneNumber!)") // TODO: err necessary?
+        public func call() throws {
+            guard telephoneNumber != nil else { throw LookupError.unhandledOptionalError }
+            Lookup.open("tel:\(telephoneNumber!)")
         }
 
         public static func composeAll(_ users: [User]) throws {

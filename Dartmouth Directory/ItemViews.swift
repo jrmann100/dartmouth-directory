@@ -31,7 +31,7 @@ struct UserListItemView: View {
         .contextMenu {
             if user.mail != nil {
                 Button {
-                    try! user.compose() // TODO: change this to a static method.
+                    try! user.compose()
                 } label: {
                     Label("Send Email", systemImage: "envelope.fill")
                 }
@@ -39,7 +39,7 @@ struct UserListItemView: View {
 
             if user.telephoneNumber != nil {
                 Button {
-                    user.call()
+                    try! user.call()
                 } label: {
                     Label("Call", systemImage: "phone.fill.arrow.up.right")
                 }
@@ -50,6 +50,11 @@ struct UserListItemView: View {
                 } label: {
                     Label("Copy Hinman", systemImage: "tray")
                 }
+            }
+            Button {
+                Lookup.copy(user.displayName)
+            } label: {
+                Label("Copy Name", systemImage: "doc.on.doc")
             }
             // TODO: save contact?
         }
@@ -67,7 +72,7 @@ struct SelectedItemsView: View {
                     ForEach(selected) { user in
                         UserListItemView(user: user).modifier(SelectedSwipeViewModifier(user: user, selected: $selected))
                     }
-                    // TODO: don't think I can make this work in Swift's page structure.
+                    // TODO: do we need this functionality?
 //                    .onMove { indexSet, index in
 //                        selected.move(fromOffsets: indexSet, toOffset: index)
 //                    }
@@ -109,8 +114,9 @@ struct UserSwipeViewModifier: ViewModifier {
             }
             .swipeActions(edge: .trailing) {
                 if user.mail != nil { Button { try! user.compose() } label: { Image(systemName: "envelope.fill") }.tint(.blue) }
-                if user.telephoneNumber != nil { Button { user.call() } label: { Image(systemName: "phone.fill") }.tint(.green) }
-                if user.mail == nil && user.telephoneNumber == nil { Button {} label: { Image(systemName: "person.fill.xmark").tint(.orange) }} // TODO: replicate around
+                if user.telephoneNumber != nil { Button { try! user.call() } label: { Image(systemName: "phone.fill") }.tint(.green) }
+                // Fallback: indicate no swipe actions are available.
+                if user.mail == nil && user.telephoneNumber == nil { Button {} label: { Image(systemName: "person.fill.xmark").tint(.orange) }}
             }
     }
 }
@@ -122,7 +128,7 @@ struct SelectedSwipeViewModifier: ViewModifier {
         content
             .swipeActions(edge: .leading) {
                 if user.mail != nil { Button { try! user.compose() } label: { Image(systemName: "envelope.fill") }.tint(.blue) }
-                if user.telephoneNumber != nil { Button { user.call() } label: { Image(systemName: "phone.fill") }.tint(.green) }
+                if user.telephoneNumber != nil { Button { try! user.call() } label: { Image(systemName: "phone.fill") }.tint(.green) }
             }
             .swipeActions(edge: .trailing) {
                 Button(role: .destructive) { selected.remove(at: selected.firstIndex(of: user)!) } label: { Image(systemName: "text.badge.minus") }
