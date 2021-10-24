@@ -21,17 +21,22 @@ struct Lookup: Codable {
     public let truncated: Bool
     public let users: [User]
 
-    public struct User: Codable, Identifiable, Equatable {
+    public struct User: Codable, Identifiable, Equatable, Hashable {
         public let dcAffiliation: String
         public let dcDeptclass: String?
         public let dcHinmanaddr: String?
         public let displayName: String
         public let eduPersonNickname: String?
         public let eduPersonPrimaryAffiliation: String
-        public let mail: String
+        public let mail: String?
         public let telephoneNumber: String?
         public let uid: String
         public var id: String { uid }
+
+        // TODO: is this necessary?
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(uid.hash)
+        }
 
         private var cnAddress: CNPostalAddress? {
             guard hinmanNo != nil else { return nil }
@@ -70,7 +75,9 @@ struct Lookup: Codable {
                 contact.jobTitle = "\(dcDeptclass!) at Dartmouth"
             }
 
-            contact.emailAddresses = [CNLabeledValue(label: eduPersonPrimaryAffiliation == "Student" ? CNLabelSchool : CNLabelWork, value: mail as NSString)]
+            if mail != nil {
+                contact.emailAddresses = [CNLabeledValue(label: eduPersonPrimaryAffiliation == "Student" ? CNLabelSchool : CNLabelWork, value: mail! as NSString)]
+            }
 
             if cnAddress != nil {
                 contact.postalAddresses = [CNLabeledValue<CNPostalAddress>(label: CNLabelSchool, value: cnAddress!)]
@@ -104,31 +111,34 @@ struct Lookup: Codable {
 //            }
         }
 
-        public func compose() {
-            Lookup.open("mailto:\(mail)")
+        public func compose() throws {
+            guard mail != nil else { throw LookupError.unhandledOptionalError }
+            Lookup.open("mailto:\(mail!)")
         }
 
         public func call() {
             Lookup.open("tel:\(telephoneNumber!)") // TODO: err necessary?
         }
 
-        public static func composeAll(_ users: [User]) {
-            Lookup.open("mailto:\(users.map { $0.mail }.joined(separator: ","))")
+        public static func composeAll(_ users: [User]) throws {
+            guard users.filter({ $0.mail != nil }).count == users.count else { throw LookupError.unhandledOptionalError }
+            Lookup.open("mailto:\(users.map { $0.mail! }.joined(separator: ","))")
         }
 
-        public static func copyAll(_ users: [User]) {
-            Lookup.copy(users.map { $0.mail }.joined(separator: ","))
+        public static func copyAll(_ users: [User]) throws {
+            guard users.filter({ $0.mail != nil }).count == users.count else { throw LookupError.unhandledOptionalError }
+            Lookup.copy(users.map { $0.mail! }.joined(separator: ","))
         }
     }
 
     public enum LookupError: Error {
-        case emptySearch, invalidSearch, fetchError, parseError, cancelError
+        case emptySearchError, invalidSearchError, fetchError, parseError, cancelError, unhandledOptionalError
     }
 
     public static func perform(for search: String) async throws -> [User] {
-        if search == "" { throw LookupError.emptySearch }
+        if search == "" { throw LookupError.emptySearchError }
         do {
-            guard let url = URL(string: "https://api-lookup.dartmouth.edu/v1/lookup?q=\(search.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&includeAlum=false&field=uid&field=displayName&field=eduPersonPrimaryAffiliation&field=mail&field=eduPersonNickname&field=dcDeptclass&field=dcAffiliation&field=telephoneNumber&field=dcHinmanaddr") else { throw LookupError.invalidSearch }
+            guard let url = URL(string: "https://api-lookup.dartmouth.edu/v1/lookup?q=\(search.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&includeAlum=false&field=uid&field=displayName&field=eduPersonPrimaryAffiliation&field=mail&field=eduPersonNickname&field=dcDeptclass&field=dcAffiliation&field=telephoneNumber&field=dcHinmanaddr") else { throw LookupError.invalidSearchError }
 
             let (data, _) = try await URLSession.shared.data(for: URLRequest(url: url))
 
@@ -138,7 +148,8 @@ struct Lookup: Codable {
         catch let error as LookupError {
             throw error
         }
-        catch is DecodingError {
+        catch let error as DecodingError {
+            print(error)
             throw LookupError.parseError
         }
         catch {
