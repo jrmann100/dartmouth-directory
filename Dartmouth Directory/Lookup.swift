@@ -69,7 +69,23 @@ struct Lookup: Codable {
             let image = UIImage(named: "Pine")
             contact.imageData = image?.jpegData(compressionQuality: 1.0)
 
-            contact.givenName = displayName
+            // https://stackoverflow.com/a/42790186/9068081
+            tryParseName: do {
+                let regex = try NSRegularExpression(pattern: "^(?<first>[\\w'-]+)\\s(?<middle>[\\w'-\\.]+\\s)?(?<last>[\\w'-]+)$")
+                let result = regex.matches(in: displayName, range: NSMakeRange(0, displayName.utf16.count))
+                if result.count == 0 { break tryParseName }
+
+                let firstRange = Range(result[0].range(withName: "first"), in: displayName)
+                let middleRange = Range(result[0].range(withName: "middle"), in: displayName)
+                let lastRange = Range(result[0].range(withName: "last"), in: displayName)
+                if firstRange != nil { contact.givenName = String(displayName[firstRange!]) }
+                if middleRange != nil { contact.middleName = String(displayName[middleRange!]) } // todo what if missing
+                if lastRange != nil { contact.familyName = String(displayName[lastRange!]) }
+            }
+            catch {}
+            if contact.givenName == "" { // we broke or caught above
+                contact.givenName = displayName
+            }
 
             if dcDeptclass != nil {
                 contact.jobTitle = "\(dcDeptclass!) at Dartmouth"
