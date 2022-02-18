@@ -26,9 +26,7 @@ struct ContactView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> CNContactViewController {
         let controller = CNContactViewController(forUnknownContact: contact)
         controller.delegate = context.coordinator
-        // TODO: these don't seem to do anything
-        controller.allowsEditing = false
-        controller.allowsActions = false
+        controller.contactStore = CNContactStore()
 
         return controller
     }

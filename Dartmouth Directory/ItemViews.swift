@@ -9,8 +9,13 @@ import SwiftUI
 
 struct UserView: View {
     let user: Lookup.User
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
-        ContactView(user.asContact()).padding(.horizontal, 20)
+        ContactView(user.asContact())
+            .padding(.horizontal, 20)
+            .background(colorScheme == .dark ? Color(uiColor: UIColor.systemBackground) : Color(uiColor: UIColor.secondarySystemBackground))
+            .edgesIgnoringSafeArea(.vertical)
     }
 }
 
@@ -18,9 +23,9 @@ struct UserListItemView: View {
     let user: Lookup.User
     var body: some View {
         NavigationLink {
-            UserView(user: user)
+            LazyView(UserView(user: user)
                 .navigationTitle(user.displayName)
-                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline))
         } label: {
             HStack {
                 Text(user.displayName + ",").fontWeight(.medium)

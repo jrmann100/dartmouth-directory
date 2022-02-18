@@ -37,7 +37,7 @@ struct SearchHeaderView: View {
     @FocusState var focused: Bool
     var body: some View {
         HStack {
-            Text("Lookup")
+            Label("Lookup", systemImage: "magnifyingglass").labelStyle(.iconOnly)
             TextField("Search...", text: $state.search)
                 .padding(10)
                 .background(Color(.systemGray6))
@@ -45,9 +45,13 @@ struct SearchHeaderView: View {
                 .frame(maxWidth: nil)
                 .focused($focused)
                 .submitLabel(.done)
-            Button { state.search = "" } label: { Label("Clear Search", systemImage: "xmark.circle.fill").labelStyle(.iconOnly) }.tint(.gray)
+            Button {
+                focused = true
+                state.search = ""
+            } label: { Label("Clear Search", systemImage: "xmark.circle.fill").labelStyle(.iconOnly) }.tint(.gray)
         }
         HStack {
+            Label("Show:", systemImage: "line.3.horizontal.decrease.circle").labelStyle(.titleOnly)
             if state.filterKind == .year {
                 Picker("Class", selection: $state.filterClass) {
                     ForEach(currentClasses, id: \.self) {
@@ -202,9 +206,10 @@ struct ContentView: View {
             .navigationTitle("Lookup")
             .navigationBarHidden(true)
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     focused = true
                 }
+                UIScrollView.appearance().keyboardDismissMode = .onDrag
             }
         }
     }
