@@ -10,10 +10,6 @@
 		174B2592270BD74D0052D170 /* Dartmouth Directory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174B2591270BD74D0052D170 /* Dartmouth Directory.swift */; };
 		174B2594270BD7500052D170 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174B2593270BD7500052D170 /* Assets.xcassets */; };
 		174B2597270BD7500052D170 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174B2596270BD7500052D170 /* Preview Assets.xcassets */; };
-<<<<<<< HEAD
-=======
-		1785973527BA94980046CE14 /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1785973427BA94980046CE14 /* LazyView.swift */; };
->>>>>>> ad29315 (Initial Commit)
 		17F521A42714B49C00CFEBD6 /* Lookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F521A32714B49C00CFEBD6 /* Lookup.swift */; };
 		17F521A62714B4D900CFEBD6 /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F521A52714B4D900CFEBD6 /* ContactView.swift */; };
 		17F521A82714B98F00CFEBD6 /* ItemViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F521A72714B98F00CFEBD6 /* ItemViews.swift */; };
