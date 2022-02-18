@@ -12,7 +12,10 @@ struct UserListHeaderView: View {
 
     var body: some View {
         HStack {
-            if state.rawUsers.count >= 50 {
+            // TODO: maybe merge this into one label?
+            if state.lookupState == .error {
+                Label(state.lookupState.rawValue, systemImage: "exclamationmark.triangle.fill").foregroundColor(.orange)
+            } else if state.rawUsers.count >= 50 {
                 Label("Limited to 50 results.", systemImage: "exclamationmark.triangle.fill").foregroundColor(.orange)
             } else {
                 // FIXME: is this language intuitive?
@@ -140,7 +143,7 @@ class SearchStateModel: ObservableObject {
         if search == lastSearch, !dirty { return }
         lastSearch = search
 
-        rawUsers = []
+//        rawUsers = []
 
         if search == "" { lookupState = .new; return }
 
@@ -152,6 +155,7 @@ class SearchStateModel: ObservableObject {
             // The user is still typing...
         } catch {
             lookupState = .error
+            // TODO: should we clear stale results? emptying rawUsers looks messy.
         }
 
         if lookupState == .results, rawUsers.count == 0 { lookupState = .none }
