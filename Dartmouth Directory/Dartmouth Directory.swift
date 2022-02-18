@@ -184,9 +184,11 @@ struct ContentView: View {
                 .animation(.default, value: state.users)
                 .animation(.default, value: state.selected)
             }
+            #if !targetEnvironment(macCatalyst)
             .refreshable {
                 await state.lookup(true)
             }
+            #endif
             .task(id: state.search) {
                 await state.lookup()
             }
