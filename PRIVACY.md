@@ -1,7 +1,9 @@
 # Dartmouth Directory Privacy Policy
 
-Dartmouth Directory is a direct proxy to [lookup.dartmouth.edu](https://lookup.dartmouth.edu).
+The Dartmouth Directory app is a direct proxy to [lookup.dartmouth.edu](https://lookup.dartmouth.edu). **All data is provided by Dartmouth College.**
 
-Your searches are submitted to this third party in order to obtain search results.
+Your searches are submitted to this third party website in order to obtain search results.
 
-No user data is collected by the app.
+To the knowledge of the developer, Dartmouth College does not collect any user data beyond what is needed to provide search results ("for a period longer than necessary to service the transmitted request in real time.")
+
+No user data is collected by the app itself.
