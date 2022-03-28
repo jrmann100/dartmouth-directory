@@ -45,6 +45,7 @@ struct SearchHeaderView: View {
                 .frame(maxWidth: nil)
                 .focused($focused)
                 .submitLabel(.done)
+                .disableAutocorrection(true)
             Button {
                 focused = true
                 state.search = ""
