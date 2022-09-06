@@ -71,7 +71,7 @@ struct Lookup: Codable {
 
             // https://stackoverflow.com/a/42790186/9068081
             tryParseName: do {
-                let regex = try NSRegularExpression(pattern: "^(?<first>[\\w'-]+)\\s(?<middle>[\\w'-\\.]+\\s)?(?<last>[\\w'-]+)$")
+                let regex = try NSRegularExpression(pattern: "^(?<first>[\\w'-]+)\\s(?<middle>[\\w'-\\.]+)?\\s?(?<last>[\\w'-]+)$")
                 let result = regex.matches(in: displayName, range: NSMakeRange(0, displayName.utf16.count))
                 if result.count == 0 { break tryParseName }
 
